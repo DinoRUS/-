@@ -1,5 +1,5 @@
 #pragma once
-#include "BaseClass.h"
+#include "gameClasses.h"
 
 //наследование - использование доступных свойств
 // и методов класса родителям (parent), классом наследником(child)
@@ -11,6 +11,55 @@ protected:  //модификатор 0 (приватный - защищенны�
 public:
     //конструктор - метод, который вызывается в момент создания экземпляра
     //класса (вручную вызвать в основном потоке программы не можем)
+    bool Save() override
+    {
+
+        
+        if (Npc::Save())
+        {
+            ofstream saveSystem("save.bin", ios::binary);
+            if (saveSystem.is_open())
+            {
+               
+                saveSystem.write(reinterpret_cast<const char*>(&strenght), sizeof(strenght));
+                for (int i = 0; i < 4; i++)
+                {
+                    saveSystem.write(reinterpret_cast<const char*>(&weapons[i]), sizeof(weapons[i]));
+                }
+                saveSystem.close();
+                return true;
+            }
+            else
+            {
+                cout << "сохранение не удалось" << endl;
+                return false;
+            }
+        }       
+    };
+    Warrior Load()
+    {
+        ifstream loadSystem("save.bin", ios::binary);
+        Warrior warrior; //временное хранилище для считывания данных из файла
+        warrior = Npc::Load();
+        if (loadSystem.is_open())
+        {
+            loadSystem.read(reinterpret_cast<char*>(&strenght), sizeof(strenght));
+            for (int i = 0; i < 4; i++)
+            {
+                loadSystem.read(reinterpret_cast<char*>(&weapons[i]), sizeof(weapons[i]));
+            }
+        }
+        else
+        {
+            cout << "связь с базой нарушена\nПамять утерена" << endl;
+            return warrior;
+        }
+        loadSystem.close();
+        return warrior;
+
+
+    };
+    
 
     Warrior() //конструктор по умолчанию, когда нет аргументов
     {
@@ -51,37 +100,19 @@ public:
     }
     //перегрузка операторов
     //перегрузка оператора сравнения (==)
+    
     bool operator == (const Warrior& warrior) const
     {
-        this->name = npc.name;
+        return ((warrior.damage == this->damage) && (warrior.health == this->health)
+            && (warrior.strenght == this->strenght));
     }
-
-        bool Save(override)
+    void operator = (Npc npc)
     {
-        if (Npc::Save)
-        {
-            ofstream saveSystem("save.bin" | ios::app);
-            if (saveSystem.is_open())
-            {
-                saveSystem.write(reinterpret_cast<const char*>(&strenght), sizeof(strenght));
-                for (int i = 0; i < 4; i++)
-                    saveSystem.write(reinterpret_cast<const char*>(&weapons[i]), sizeof(weapons[i]));
-            }
-            saveSystem.close();
-            return true;
-        }
-        else
-        {
-            cout << "сохранение не удалось\nПопроуйбте позже\n";
-            return false
-        }
+        this->name = npc.GetName();
+        this->name = npc.GetHealth();
+        this->name = npc.GetDamage();
+        this->name = npc.GetLvl();
     }
-        Warrior Load()
-        {
-            ifstream loadSystem("save.bin", ios::binary);
-            Warrior 
-        }
-
 
     //деструктор - метод, который вызывается автоматически при высвобождении памяти
     //при окончании работы с экземпляром класса (нельзя вызвать вручную)
@@ -135,10 +166,36 @@ public:
         GetInfo();
         CastSpell();
     }
+    bool Save() override
+    {
+
+
+        if (Npc::Save())
+        {
+            ofstream saveSystem("save.bin", ios::binary);
+            if (saveSystem.is_open())
+            {
+
+                saveSystem.write(reinterpret_cast<const char*>(&intellect), sizeof(intellect));
+                for (int i = 0; i < 4; i++)
+                {
+                    saveSystem.write(reinterpret_cast<const char*>(&spell[i]), sizeof(spell[i]));
+                }
+                saveSystem.close();
+                return true;
+            }
+            else
+            {
+                cout << "сохранение не удалось" << endl;
+                return false;
+            }
+        }
+    }
     ~Wizard() //деструктор всегда без аргументов
     {
         cout << name << " испустил дух" << endl;
     }
+
 };
 
 //множественное наследование
@@ -171,5 +228,30 @@ public:
         GetInfo();
         CastSpell();
         GetWeapons();
+    }
+    bool Save() override
+    {
+
+
+        if (Npc::Save())
+        {
+            ofstream saveSystem("save.bin", ios::binary);
+            if (saveSystem.is_open())
+            {
+
+                saveSystem.write(reinterpret_cast<const char*>(&intellect), sizeof(intellect));
+                for (int i = 0; i < 4; i++)
+                {
+                    saveSystem.write(reinterpret_cast<const char*>(&spell[i]), sizeof(spell[i]));
+                }
+                saveSystem.close();
+                return true;
+            }
+            else
+            {
+                cout << "сохранение не удалось" << endl;
+                return false;
+            }
+        }
     }
 };
