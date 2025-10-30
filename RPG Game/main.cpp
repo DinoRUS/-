@@ -1,7 +1,7 @@
 #include <iostream>
 #include "windows.h"
-#include "BaseClass.h"
-#include "StartClasses.h"
+#include "mainClasses.h"
+#include "mainClasse.h"
 
 using namespace std;
 
