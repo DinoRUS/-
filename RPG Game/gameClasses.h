@@ -1,5 +1,5 @@
 #pragma once
-#include "gameClasses.h"
+#include "mainClass.h"
 
 //наследование - использование доступных свойств
 // и методов класса родителям (parent), классом наследником(child)
@@ -14,13 +14,13 @@ public:
     bool Save() override
     {
 
-        
+
         if (Npc::Save())
         {
             ofstream saveSystem("save.bin", ios::binary);
             if (saveSystem.is_open())
             {
-               
+
                 saveSystem.write(reinterpret_cast<const char*>(&strenght), sizeof(strenght));
                 for (int i = 0; i < 4; i++)
                 {
@@ -34,7 +34,7 @@ public:
                 cout << "сохранение не удалось" << endl;
                 return false;
             }
-        }       
+        }
     };
     Warrior Load()
     {
@@ -59,7 +59,7 @@ public:
 
 
     };
-    
+
 
     Warrior() //конструктор по умолчанию, когда нет аргументов
     {
@@ -100,7 +100,7 @@ public:
     }
     //перегрузка операторов
     //перегрузка оператора сравнения (==)
-    
+
     bool operator == (const Warrior& warrior) const
     {
         return ((warrior.damage == this->damage) && (warrior.health == this->health)
@@ -121,7 +121,6 @@ public:
         cout << name << " пал смертью храбрых" << endl;
     }
 };
-
 
 //virtual - создает виртуализацию методов, классов
 //при этом сам класс повторно не создается
