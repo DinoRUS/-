@@ -6,13 +6,13 @@ using namespace std;
 class Npc
 {
 protected: //модификатор 0 защищенный (дает доступ внутри класса родителя и наследника)
-           //но все еще не дает доступ в основном потоке программы
+    //но все еще не дает доступ в основном потоке программы
 
     string name{ "персонаж" };
     unsigned int health{ 10 };
     float damage{ 5 };
     unsigned short lvl{ 1 };
-   
+
 public:    //публичный модификатор доступ (использовать метод можно в любом месте)
     string GetName()
     {
@@ -36,13 +36,13 @@ public:    //публичный модификатор доступ (испол�
         cout << "Здоровье - " << health << endl;
         cout << "Урон - " << damage << endl;
     }
-    
+
     virtual void Create() {};
-    virtual bool Save() 
+    virtual bool Save()
     {
-    
+
         ofstream saveSystem("save.bin", ios::binary);
-        if (saveSystem.is_open()) 
+        if (saveSystem.is_open())
         {
             saveSystem.write(reinterpret_cast<const char*>(&name), sizeof(name));
             saveSystem.write(reinterpret_cast<const char*>(&health), sizeof(health));
@@ -58,7 +58,7 @@ public:    //публичный модификатор доступ (испол�
         }
         saveSystem.close();
     };
-    Npc Load() 
+    Npc: Load()
     {
         ifstream loadSystem("save.bin", ios::binary);
         Npc npc; //временное хранилище для считывания данных из файла
@@ -76,13 +76,14 @@ public:    //публичный модификатор доступ (испол�
         }
         loadSystem.close();
         return npc;
-    
-    
+
+
     };
 
 
 
 };
+
 class Player
 {
 public:
